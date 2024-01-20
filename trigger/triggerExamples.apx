@@ -7,3 +7,19 @@ trigger AccountPhone on Account (before insert) {
         }
     }
 }
+
+// If the source field left empty, automatically call it from the system
+
+trigger LeadTrigger on Lead (before insert, before update) {
+     
+    for(Lead w : Trigger.new) {
+        
+        if(String.isBlank(w.LeadSource)) {
+            w.LeadSource = 'Other';
+        }
+        
+        if(String.isBlank(w.Industry)) {
+            w.addError('The industry field cannot be blank');
+        }
+    }
+}
