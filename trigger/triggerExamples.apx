@@ -23,3 +23,25 @@ trigger LeadTrigger on Lead (before insert, before update) {
         }
     }
 }
+
+// If the ownership in the newly created account is empty, you can set it to private with the trigger, and if a new update is made, this time the ownership in the existing account will be set to public.
+
+trigger AccountOwnership on Account (before insert, before update) {
+    if (Trigger.isBefore) {
+        if (Trigger.isInsert) {
+            for (Account acc : Trigger.new) {
+                if (String.isBlank(acc.Ownership)) {
+                    acc.Ownership = 'Private';
+                }
+            }
+        }
+
+        if (Trigger.isUpdate) {
+            for (Account acc : Trigger.new) {
+                if (String.isBlank(acc.Ownership)) {
+                    acc.Ownership = 'Public';
+                }
+            }
+        }
+    }
+}
