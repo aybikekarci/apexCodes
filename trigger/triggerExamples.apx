@@ -77,3 +77,36 @@ trigger AccountAddressTrigger on Account (before insert, before update) {
             } 
         } 
 }
+
+// BUILDING THE ABOVE EXAMPLE WITH APEX CLASS AND HANDLER:
+
+Public class CreateOppHandler {
+
+	Public static void myOpp( List <Account>newAccount, Map<Id, Account> oldAccountMap){
+
+		    List<Opportunity> oppList = new List<Opportunity>();
+
+    for (Account acc : newAccount) {
+        if (acc.AnnualRevenue != oldAccountMap.get(acc.Id).AnnualRevenue) {
+
+            if (acc.AnnualRevenue > 5000000) {
+                Opportunity opp = new Opportunity();
+                opp.Name = acc.Name;
+                opp.AccountId = acc.Id;
+                opp.StageName = 'Prospecting';
+                opp.CloseDate = System.today().addMonths(1);
+                oppList.add(opp);
+            }
+        }
+    }
+
+
+}
+}
+
+// calling a handler trigger:
+
+trigger CreateOpp on Account (after update) {
+
+	CreateOppHandler.myOpp(Trigger.new, trigger.oldMap);
+}
