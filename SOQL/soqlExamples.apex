@@ -8,3 +8,17 @@ public class AccountUtility {
             system.debug('acctRev'+ acctRev);
         }
     }
+
+// To discover residences indexed with an app Realty within the remaining 30 days.
+
+public class PropertyUtility {
+    public static void newListedProperties(){
+        List<Property__c> newPropList = new List<Property__c>();
+        newPropList = [SELECT Broker__r.Email__c, Id, Name, Days_On_Market__c FROM Property__c WHERE Days_On_Market__c <=30];
+        
+        for(Property__c p: newPropList){
+            String propEmail = p.Name + ':' + p.Broker__r.Email__c;
+            system.debug(propEmail);
+        }
+    }
+}
