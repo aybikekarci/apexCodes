@@ -44,4 +44,41 @@ public class TestVerifyDate
     }
 }
 
+// Create an Apex class named BankAcct. Give the BankAcct class three attributes: balance, acctName, and acctType. Include a method named makeDeposit to set the account balance.
+
+public class BankAcct {
+    private integer balance=0;
+    public string acctName;
+    //Declare a public string attribute named accttype
+    public string accttype;
+    //Declare a method, named makeDeposit, that accepts an integer named deposit
+    //Within the method, add the deposit amount to the balance
+    public void makeDeposit (integer deposit) {
+    balance = balance + deposit;
+    }
+    //Declare a method, named getBalance, that returns an integer
+    public integer getBalance() {
+    //Return the balance attribute
+    return balance;
+    }
+}
+
+// 2nd. Create a class named CreateContactFromCan and a method named createContact.
+
+public with sharing class CreateContactFromCan {
+    public void createContact(){
+    }
+}
+
+// 3rd. in debug, try this code:
+
+//From the BankAcct class, instantiate an object named chkAcct
+BankAcct chkAcct = new BankAcct();
+//Set the accttype attribute of the chkAcct object to Checking
+chkAcct.accttype = 'Checking';
+//Set the acctName attribute of the chkAcct object to D.Castillo-Chk
+chkAcct.acctName = 'D.Castillo-Chk';
+//Invoke the makeDeposit method with 150 as the argument
+chkAcct.makeDeposit(150);
+System.debug(chkAcct.getBalance());
 
