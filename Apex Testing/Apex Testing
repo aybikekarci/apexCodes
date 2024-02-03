@@ -82,3 +82,21 @@ chkAcct.acctName = 'D.Castillo-Chk';
 chkAcct.makeDeposit(150);
 System.debug(chkAcct.getBalance());
 
+// Create an Apex class that returns a list of contacts based on two incoming parameters: the number of contacts to generate and the last name, which is common to all contacts. Do not insert the generated contact records into the database. 
+
+public class RandomContactFactory {
+       public static List<Contact> generateRandomContacts(Integer numContactsToGenerate, String FName) {
+
+        List<Contact> contactList = new List<Contact>();
+        for(Integer i=0;i<numContactsToGenerate;i++) {
+            Contact c = new Contact(FirstName=FName + ' ' + i, LastName = 'Contact '+i);
+            contactList.add(c);
+            System.debug(c);
+        }
+
+        //insert contactList;
+
+        System.debug(contactList.size());
+        return contactList;
+    }
+}
