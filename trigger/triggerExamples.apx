@@ -110,3 +110,36 @@ trigger CreateOpp on Account (after update) {
 
 	CreateOppHandler.myOpp(Trigger.new, trigger.oldMap);
 }
+
+// when a new LEAD is created assign 'EDUCATION' if industry field is NULL, if Lead is updated , assign Education if industry field is NULL.
+
+trigger LeadTrigger on Lead (before insert , before update , before delete , after insert , after update, after delete, after undelete ) {
+    
+    SWITCH on Trigger.operationType {
+        
+        WHEN BEFORE_INSERT  {
+            LeadTriggerHandler.industryControl(list<lead> leadList); 
+
+        }
+        WHEN BEFORE_UPDATE  {  
+            for(lead NewLd : Trigger.new){
+                if(newLd.Industry == null){ // String.isBlanck(newLd.Industry)
+                    newLd.Industry='Education'
+                }
+            }
+        }
+    }   
+}
+
+in Handler class: 
+
+public class LeadTriggerHandler {
+    public static VOID industryControl(list<lead> leadList){
+            for(lead NewLd : leadList){ 
+                if(newLd.Industry == null){
+                    newLd.Industry='Education'
+                }
+            }        
+    }
+}
+
