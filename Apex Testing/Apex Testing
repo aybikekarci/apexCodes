@@ -100,3 +100,13 @@ public class RandomContactFactory {
         return contactList;
     }
 }
+
+// LEAD TRIGGER (VALIDATION) EXAMPLES
+
+// if a new LEAD created or Updated and if 'Industry' filed is NULL; Give a warning
+
+for (Lead Id: Trigger.new){
+   if(String.isBlank(Id.Industry)){
+      Id.addError('Your Industry filed is EMPTY. Please fill it! ')
+   }
+}
