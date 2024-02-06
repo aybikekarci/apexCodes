@@ -143,3 +143,19 @@ public class LeadTriggerHandler {
     }
 }
 
+// Create an error (Warning) trigger when a Lead is updated from 'Open - Not Contacted' status to 'Closed - Not Converted' status. (Validation )
+
+trigger LeadTrigger on Lead (before update) {
+    // Iterate through the leads being updated
+    for (Lead updatedLead : Trigger.new) {
+        // Check if the lead's status is changing from 'Open - Not Contacted' to 'Closed - Not Converted'
+        if (updatedLead.Status == 'Closed - Not Converted' && 
+            Trigger.oldMap.get(updatedLead.Id).Status == 'Open - Not Contacted') {
+            // Generate a warning message
+            String warningMessage = 'Changing Lead status from "Open - Not Contacted" to "Closed - Not Converted" cannot being proceed.';
+            
+            // Display the warning message
+            updatedLead.addError(warningMessage);
+        }
+    }
+}
