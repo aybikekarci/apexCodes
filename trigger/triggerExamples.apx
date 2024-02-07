@@ -159,3 +159,33 @@ trigger LeadTrigger on Lead (before update) {
         }
     }
 }
+
+
+// After creating Lead record , create a Task. While creating a Lead assign ‘Other’ if Lead Source is null. 
+
+ trigger LeadTrigger on Lead (before insert, after insert) {
+    if (Trigger.isBefore && Trigger.isInsert) {
+        for (Lead newLead : Trigger.new) {
+            // Assign 'Other' if Lead Source is null
+            if (newLead.LeadSource == null) {
+                newLead.LeadSource = 'Other';
+            }
+        }
+    } else if (Trigger.isAfter && Trigger.isInsert) {
+        List<Task> tasksToInsert = new List<Task>();
+        for (Lead newLead : Trigger.new) {
+            // Create a Task for each inserted Lead
+            Task newTask = new Task(
+                Subject = 'Follow-up for Lead: ' + newLead.Name,
+                WhatId = newLead.Id,
+                ActivityDate = Date.today() + 7, // Example: Task due date 7 days from today
+                Status = 'Not Started',
+                Priority = 'Normal'
+            );
+            tasksToInsert.add(newTask);
+        }
+        // Insert all the tasks created
+        insert tasksToInsert;
+    }
+}
+
