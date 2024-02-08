@@ -189,3 +189,39 @@ trigger LeadTrigger on Lead (before update) {
     }
 }
 
+// Create several contacts field on the account and develop a trigger that updates this field on the account every time a new contact is created, updated, deleted, undeleted
+
+trigger UpdateNumberOfContacts on Contact (after insert, after update, after delete, after undelete) {
+      
+    SWITCH on Trigger.operationType {
+
+        WHEN AFTER_INSERT   { 
+            set<id> accIds = new Set<ID>();
+             for(contact cnt : trigger.new){
+                if(cnt.AccountId != null){
+                    accIds.add(cnt.AccountId);
+                }
+            }
+          list<account> accList = [SELECT id,name ,Contact_Number__c, (SELECT id FROM contacts ) FROM account WHERE id IN : accIds];
+            for(account acc :  accList  ){
+                acc.Contact_Number__c=   acc.contacts.size();
+            }
+           update accList;              
+        }
+        WHEN AFTER_DELETE   {
+         set<id> accIds = new Set<ID>();
+            for(contact cnt : trigger.old){
+                if(cnt.AccountId != null){
+                    accIds.add(cnt.AccountId);
+                }                
+            }
+            
+          list<account> accList = [SELECT id,name ,Contact_Number__c, (SELECT id FROM contacts ) FROM account WHERE id IN : accIds];              
+            for(account acc :  accList  ){
+                
+                acc.Contact_Number__c=   acc.contacts.size();
+            }
+           update accList; 
+        } 
+    }
+}
