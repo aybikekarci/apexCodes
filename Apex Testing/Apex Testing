@@ -110,3 +110,72 @@ for (Lead Id: Trigger.new){
       Id.addError('Your Industry filed is EMPTY. Please fill it! ')
    }
 }
+
+// 2 different methods that return contact lists whose id is given
+
+public class ContactSayilari {
+    
+    // id is verilen accountun contact ssayisini donunuz
+    public static integer contactSayisi( String accId){
+        integer contactSayisi;
+        // kod yaziniz
+        string gelenId=accId;
+        if( accId.length() == 18  ){
+           
+            contactSayisi= [SELECT COUNT() FROM Contact WHERE AccountId = :gelenId];
+            
+        }else {
+            contactSayisi=-1;
+        }
+      
+        if(contactSayisi == null  ){
+           
+            contactSayisi = -1;
+        }
+        
+        
+        return contactSayisi;
+    }
+    
+    // id is verilen accountun contact Listesini donunuz
+     public static List<contact> contactListesi( id accId){
+        
+        List<contact> cntList = new List<contact>();
+         // koda yaziniz
+         
+         
+         
+         return cntList;
+        
+    }
+    
+    
+}
+
+in Test class:
+
+@isTest
+public class ContactSayilariTest2 {
+    
+    
+    @isTest
+    Private Static Void contactSayisiTest(){
+      Account acc = new Account();
+        acc.Name = 'XXX';
+        insert acc;
+        
+      Contact cnt = new Contact();
+        cnt.LastName = 'zz contatc of ' + acc.Name; 
+        cnt.AccountId = acc.id;
+       insert cnt; 
+        
+      integer sonuc= ContactSayilari.contactSayisi(acc.id);
+      system.assertEquals(2, sonuc, ' burlington textile contact sayisi 1 dir'); 
+        
+        
+    }
+    
+    
+    
+    
+}
