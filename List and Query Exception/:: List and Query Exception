@@ -1,0 +1,18 @@
+// List and Query Exception
+
+// Query Exception
+
+List<Contact> myCon = [SELECT Name FROM Contact WHERE Name = 'Jade'];
+system.debug(myCon.size());
+
+Contact s=[SELECT Name FROM Contact WHERE Name = 'Jade'];
+system.debug(s);
+
+try{
+    List<Contact> myCon = [SELECT Name FROM Contact WHERE Name = 'Jade'];
+	system.debug(myCon.size());
+	Contact s=[SELECT Name FROM Contact WHERE Name = 'Jade'];
+	system.debug(s);
+}catch(QueryException e){
+    system.debug('The following exception has occured: '+e.getMessage());
+}
