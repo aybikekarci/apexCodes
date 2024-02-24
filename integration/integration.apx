@@ -1,0 +1,19 @@
+// Accessing records sent from Postman with usind Delete and Body method via Salesforce
+
+    @HttpDelete
+    global static VOID doDelete() {
+        RestRequest req = RestContext.request;
+        system.debug('req.requestBody >>' +req.requestBody.toString()); // restrequest icinde body var
+        system.debug('req.params >> ' +req.params.toString());
+        
+        // req.params >> {fdfdssfdg, afdgadf};
+
+    }
+
+// after this process, Deserialization of JSON format
+
+    Map<String,Object> inBody= (Map<String,Object>)JSON.deserializeUntyped(req.requestBody.toString()); 
+        
+        for(string str: inBody.keySet()){
+            system.debug(str + ' >>> ' + inBody.get(str));
+        } 
